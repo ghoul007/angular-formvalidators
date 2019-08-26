@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { of, Observable, timer } from 'rxjs';
+import { map, tap, timeout, delay } from 'rxjs/operators';
 
 @Component({
   selector: 'app-register',
@@ -9,7 +11,8 @@ import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors }
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   passGroup: FormGroup;
-    blacklist = ["ahmed", "khaled"];
+  blacklist = ["ahmed", "khaled"];
+  blackEmailAsync$ = of(["ghoul.ahmed5@gmail.com", "ghoul.ahmed5@gmail.com"]).pipe(delay(5000))
 
   constructor(private fb: FormBuilder) { }
 
@@ -26,20 +29,24 @@ export class RegisterComponent implements OnInit {
       })
     this.registerForm = this.fb.group({
       username: ["", [Validators.required, this.checkUsername.bind(this)]],
-      email: ["", Validators.compose([Validators.required, RegisterComponent.customEmail])],
+      email: ["", [Validators.required, RegisterComponent.customEmail] , this.checkEmailAsync.bind(this)],
       passGroup: this.passGroup
     })
   }
 
-     checkUsername(control: AbstractControl): { [s: string]: boolean } | null {
-    if (control.value.trim().length === 0) {
+  checkUsername(control: AbstractControl): { [s: string]: boolean } | null {
+    if (control.value && control.value.trim().length === 0) {
       return null
     }
-    return this.blacklist.includes(control.value)?{username:true}:null
+    return this.blacklist.includes(control.value) ? { username: true } : null
+  }
+
+  checkEmailAsync(control: AbstractControl):Observable< { [s: string]: boolean } | null >   {
+    return this.blackEmailAsync$.pipe(map(res=> res.includes(control.value)?{exitEmail:true}:null))
   }
 
   static samePassValidator(control: AbstractControl): { [s: string]: boolean } | null {
-    if (control.get('password').value.trim().length === 0) {
+    if (!control.get('password').value || control.get('password').value.trim().length === 0) {
       return null
     }
     return (control.get('password').value === control.get('repeatPassword').value) ? null : { pass: true }

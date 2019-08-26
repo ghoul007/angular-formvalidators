@@ -16,6 +16,7 @@
         placeholder="Enter email">
         <small id="emailHelp" *ngIf="email.dirty && email.errors?.required" class="form-text text-danger">We'll never share your email with anyone else.</small>
         <small id="emailHelp" *ngIf="email.dirty &&  !email.errors?.required && email.errors?.email" class="form-text text-danger">invalid email.</small>
+        <small id="emailHelp" *ngIf="email.dirty &&  !email.errors?.required && email.errors?.exitEmail" class="form-text text-danger"> email exist. </small>
       </div>
       <ng-container formGroupName="passGroup" >
 
