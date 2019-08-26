@@ -8,47 +8,62 @@ import { FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors }
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
+  passGroup: FormGroup;
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
     this.initForm();
   }
 
-  initForm(){
-    this.registerForm =  this.fb.group({
-      username: ["", Validators.required],
-      email: ["", [Validators.required, Validators.email, RegisterComponent.customEmail]],
+  initForm() {
+
+    this.passGroup = this.fb.group({
       password: ["", Validators.required],
       repeatPassword: ["", Validators.required]
+    }, {
+        validator: RegisterComponent.samePassValidator
+      })
+    this.registerForm = this.fb.group({
+      username: ["", Validators.required],
+      email: ["", [Validators.required, Validators.email, RegisterComponent.customEmail]],
+      passGroup: this.passGroup
     })
   }
 
-
-  static customEmail(control: AbstractControl): {[s:string]: boolean}| null{
-    return (/([0-9a-zA-Z]([\+\-_\.][0-9a-zA-Z]+)*)+@(([0-9a-zA-Z][-\w]*[0-9a-zA-Z]*\.)+[a-zA-Z0-9]{2,17})$/)
-    .exec(control.value)?null:{email: true}
-    // ^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$
+  static samePassValidator(control: AbstractControl): { [s: string]: boolean } | null {
+    if (control.get('password').value.trim().length===0){
+      return null
+    }
+    return (control.get('password').value === control.get('repeatPassword').value) ?null:{pass: true}
   }
 
-  get username(){
+  static customEmail(control: AbstractControl): { [s: string]: boolean } | null {
+    return (/([0-9a-zA-Z]([\+\-_\.][0-9a-zA-Z]+)*)+@(([0-9a-zA-Z][-\w]*[0-9a-zA-Z]*\.)+[a-zA-Z0-9]{2,17})$/)
+      .exec(control.value) ? null : { email: true }
+  }
+
+  get username() {
     return this.registerForm.get('username')
   }
-  get email(){
+  get email() {
     return this.registerForm.get('email')
   }
-  get password(){
-    return this.registerForm.get('password')
+  get password() {
+    return this.registerForm.get('passGroup').get('password')
   }
-  get repeatPassword(){
-    return this.registerForm.get('repeatPassword')
+  get passGroupField() {
+    return this.registerForm.get('passGroup') 
+  }
+  get repeatPassword() {
+    return this.registerForm.get('passGroup').get('repeatPassword')
   }
 
 
-  createForm(){
+  createForm() {
     console.log("hello")
   }
 
-  resetForm(){
+  resetForm() {
     this.registerForm.reset();
   }
 
