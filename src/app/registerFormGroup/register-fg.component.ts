@@ -22,13 +22,13 @@ export class RegisterFGComponent implements OnInit {
 
   initForm() {
     this.passGroup = new FormGroup({
-      password:  new FormControl(["", Validators.required]),
-      repeatPassword: new FormControl(["", Validators.required])
+      password:  new FormControl("", Validators.required),
+      repeatPassword: new FormControl("", Validators.required)
     }, RegisterFGComponent.samePassValidator )
     
     this.registerForm = new FormGroup({
-      username: new FormControl(["", [Validators.required, this.checkUsername.bind(this)]]),
-      email: new FormControl(["", [Validators.required, RegisterFGComponent.customEmail] , this.checkEmailAsync.bind(this)]),
+      username: new FormControl("", [Validators.required, this.checkUsername.bind(this)]),
+      email: new FormControl("", [Validators.required, RegisterFGComponent.customEmail] , this.checkEmailAsync.bind(this)),
       passGroup: this.passGroup
     })
   }
@@ -45,7 +45,7 @@ export class RegisterFGComponent implements OnInit {
   }
 
   static samePassValidator(control: any): { [s: string]: boolean } | null {
-    if (!control.get('password').value || control.get('password').value.trim().length === 0) {
+    if (!control.get('password').value ||   control.get('password').value.trim().length === 0) {
       return null
     }
     return (control.get('password').value === control.get('repeatPassword').value) ? null : { pass: true }
