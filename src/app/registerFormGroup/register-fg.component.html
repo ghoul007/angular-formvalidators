@@ -1,42 +1,66 @@
-<div class="row">
-  <div class="container">
-      <h1 class="text-center">Form validation (FormGroup)</h1>
-    <form [formGroup]="registerForm"  (ngSubmit)="createForm()">
+ 
 
-      <div class="form-group">
-        <label for="exampleInputPassword1">Username</label>
-        <input type="text" formControlName="username" class="form-control" id="exampleInputPassword1" placeholder="Password">
-        <small id="emailHelp" *ngIf="username.dirty && username.errors?.required"  class="form-text text-danger">We'll never share your email with anyone else.</small>
-        <small id="emailHelp" *ngIf="username.dirty && username.errors?.username"  class="form-text text-danger">invalid username.</small>
-      </div>
-      
-      <div class="form-group">
-        <label for="exampleInputEmail1">Email address</label>
-        <input type="email"  formControlName="email"  class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-        placeholder="Enter email">
-        <small id="emailHelp" *ngIf="email.dirty && email.errors?.required" class="form-text text-danger">We'll never share your email with anyone else.</small>
-        <small id="emailHelp" *ngIf="email.dirty &&  !email.errors?.required && email.errors?.email" class="form-text text-danger">invalid email.</small>
-        <small id="emailHelp" *ngIf="email.dirty &&  !email.errors?.required && email.errors?.exitEmail" class="form-text text-danger"> email exist. </small>
-      </div>
-      <ng-container formGroupName="passGroup" >
-
-        <div class="form-group">
-          <label for="exampleInputPassword1">Password</label>
-          <input type="password"  formControlName="password"  class="form-control" id="exampleInputPassword1" placeholder="Password">
-          <small id="emailHelp" *ngIf="password.dirty && password.errors?.required"  class="form-text text-danger">We'll never share your email with anyone else.</small>
-          <small id="emailHelp" *ngIf="password.dirty && passGroupField.errors?.pass"  class="form-text text-danger">you should same password.</small>
+      <div class="row">
+          <div class="container">
+            <h1 class="text-center">Form validation (FormGroup)</h1>
+            <form [formGroup]="registerForm" (ngSubmit)="createForm()">
+        
+              <div class="form-group">
+                <label for="exampleInputPassword1">Username</label>
+                <input [ngClass]="{ 'is-invalid': !isValid(username)}" type="text"
+                  formControlName="username" class="form-control" id="exampleInputPassword1" placeholder="Username">
+                <ng-container *ngIf="username.dirty">
+                  <small id="emailHelp" *ngIf="username.errors?.required" class="form-text text-danger">We'll never share your
+                    email with anyone else.</small>
+                  <small id="emailHelp" *ngIf="username.errors?.username" class="form-text text-danger">invalid
+                    username.</small>
+                </ng-container>
+              </div>
+        
+              <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input [ngClass]="{  'is-invalid': !isValid(email)}" type="email"
+                  formControlName="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                  placeholder="Enter email">
+                <ng-container *ngIf="email.dirty">
+                  <small id="emailHelp" *ngIf="email.errors?.required" class="form-text text-danger">We'll never share your
+                    email with anyone else.</small>
+                  <small id="emailHelp" *ngIf="!email.errors?.required && email.errors?.email"
+                    class="form-text text-danger">invalid email.</small>
+                  <small id="emailHelp" *ngIf="!email.errors?.required && email.errors?.exitEmail"
+                    class="form-text text-danger"> email exist. </small>
+                </ng-container>
+              </div>
+              <ng-container formGroupName="passGroup">
+        
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Password</label>
+                  <input  [ngClass]="{  'is-invalid': !isValid(password)}"
+                    type="password" formControlName="password" class="form-control" id="exampleInputPassword1"
+                    placeholder="Password">
+                  <ng-container *ngIf="password.dirty">
+                    <small id="emailHelp" *ngIf="password.errors?.required" class="form-text text-danger">We'll never share your
+                      email with anyone else.</small>
+                  </ng-container>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword2"> Repeat Password</label>
+                  <input
+                    [ngClass]="{  'is-invalid': repeatPassword.dirty && passGroupField.invalid}"
+                    type="password" formControlName="repeatPassword" class="form-control" id="exampleInputPassword2"
+                    placeholder="Repeat Password">
+                  <ng-container *ngIf="repeatPassword.dirty">
+                    <small id="emailHelp" *ngIf="repeatPassword.errors?.required" class="form-text text-danger">We'll never
+                      share your email with anyone else.</small>
+                    <small id="emailHelp" *ngIf="passGroupField.errors?.pass" class="form-text text-danger">you should same
+                      password</small>
+                  </ng-container>
+                </div>
+              </ng-container>
+        
+              <button class="btn btn-primary" [disabled]="registerForm.invalid">Submit</button>
+              <button (click)="resetForm()" class="btn btn-default">Reset</button>
+            </form>
+        
+          </div>
         </div>
-        <div class="form-group">
-          <label for="exampleInputPassword2"> Repeat Password</label>
-          <input type="password"  formControlName="repeatPassword"  class="form-control" id="exampleInputPassword2" placeholder="Repeat Password">
-          <small id="emailHelp" *ngIf="repeatPassword.dirty && repeatPassword.errors?.required"  class="form-text text-danger">We'll never share your email with anyone else.</small>
-          <small id="emailHelp" *ngIf="repeatPassword.dirty && passGroupField.errors?.pass"  class="form-text text-danger">you should same password</small>
-        </div>
-      </ng-container>
-      
-      <button  class="btn btn-primary" [disabled]="registerForm.invalid" >Submit</button>
-      <button  (click)="resetForm()" class="btn btn-default">Reset</button>
-    </form>
-
-  </div>
-</div>

@@ -5,8 +5,8 @@
 
       <div class="form-group">
         <label for="exampleInputPassword1">Username</label>
-        <input [ngClass]="{'is-valid':!username.invalid, 'is-invalid': username.dirty && username.invalid}" type="text"
-          formControlName="username" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        <input [ngClass]="{ 'is-invalid': !isValid(username)}" type="text"
+          formControlName="username" class="form-control" id="exampleInputPassword1" placeholder="Username">
         <ng-container *ngIf="username.dirty">
           <small id="emailHelp" *ngIf="username.errors?.required" class="form-text text-danger">We'll never share your
             email with anyone else.</small>
@@ -17,7 +17,7 @@
 
       <div class="form-group">
         <label for="exampleInputEmail1">Email address</label>
-        <input [ngClass]="{'is-valid':!email.invalid, 'is-invalid': email.dirty && email.invalid}" type="email"
+        <input [ngClass]="{  'is-invalid': !isValid(email)}" type="email"
           formControlName="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
           placeholder="Enter email">
         <ng-container *ngIf="email.dirty">
@@ -33,7 +33,7 @@
 
         <div class="form-group">
           <label for="exampleInputPassword1">Password</label>
-          <input [ngClass]="{'is-valid':!password.invalid, 'is-invalid': password.dirty && password.invalid}"
+          <input  [ngClass]="{  'is-invalid': !isValid(password)}"
             type="password" formControlName="password" class="form-control" id="exampleInputPassword1"
             placeholder="Password">
           <ng-container *ngIf="password.dirty">
@@ -44,7 +44,7 @@
         <div class="form-group">
           <label for="exampleInputPassword2"> Repeat Password</label>
           <input
-            [ngClass]="{'is-valid':!repeatPassword.invalid, 'is-invalid': repeatPassword.dirty && passGroupField.invalid}"
+            [ngClass]="{  'is-invalid': repeatPassword.dirty && passGroupField.invalid}"
             type="password" formControlName="repeatPassword" class="form-control" id="exampleInputPassword2"
             placeholder="Repeat Password">
           <ng-container *ngIf="repeatPassword.dirty">

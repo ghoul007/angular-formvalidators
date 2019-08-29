@@ -73,6 +73,17 @@ export class RegisterFGComponent implements OnInit {
   }
 
 
+
+
+  isValid(fieldName) {
+    
+    if (!fieldName) {
+      return;
+    }
+
+    return (!fieldName.touched && !fieldName.dirty) || fieldName.valid;
+  }
+
   createForm() {
     console.log("hello")
   }

@@ -46,7 +46,8 @@ export class RegisterComponent implements OnInit {
   }
 
   static samePassValidator(control: AbstractControl): { [s: string]: boolean } | null {
-    if (!control.get('password').value || control.get('password').value.trim().length === 0) {
+    // if (!control.get('password').value || control.get('password').value.trim().length === 0) {
+    if (control.get('password').pristine || control.get('repeatPassword').pristine) {
       return null
     }
     return (control.get('password').value === control.get('repeatPassword').value) ? null : { pass: true }
@@ -71,6 +72,16 @@ export class RegisterComponent implements OnInit {
   }
   get repeatPassword() {
     return this.registerForm.get('passGroup').get('repeatPassword')
+  }
+
+
+  isValid(fieldName) {
+    
+    if (!fieldName) {
+      return;
+    }
+
+    return (!fieldName.touched && !fieldName.dirty) || fieldName.valid;
   }
 
 
